@@ -811,6 +811,7 @@ nif_call(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     ERL_NIF_TERM list;
     ERL_NIF_TERM cell;
     ERL_NIF_TERM ret;
+    ERL_NIF_TERM tail;
 
     JsValueRef* args = NULL;
     JsValueRef undefined;
@@ -880,11 +881,12 @@ nif_call(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     args = enif_alloc((length + 1) * sizeof(JsValueRef));
     args[0] = global_obj;
     for(i = 1; i <= length; i++) {
-        if(!enif_get_list_cell(env, list, &cell, &list)) {
+        if(!enif_get_list_cell(env, list, &cell, &tail)) {
             return t2(env, ATOM_error, ATOM_invalid_argument_list);
         }
 
         ret = erl2js(&conv, cell, &(args[i]));
+        list = tail;
         if(ret != ATOM_ok) {
             goto done;
         }
