@@ -884,9 +884,8 @@ nif_call(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
         if(!enif_get_list_cell(env, list, &cell, &tail)) {
             return t2(env, ATOM_error, ATOM_invalid_argument_list);
         }
-
-        ret = erl2js(&conv, cell, &(args[i]));
         list = tail;
+        ret = erl2js(&conv, cell, &(args[i]));
         if(ret != ATOM_ok) {
             goto done;
         }
